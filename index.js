@@ -14,19 +14,27 @@ app.get('/base-calc', async (req, res) => {
   res.send(baseCalc);
 });
 
-// Ajustar para colocar um array de ranges - mongoose
-// Fazer ele retornar um 201 - express
+// 201 - express
 app.post('/base-calc', async (req, res) => {
-  console.log(req.body);
-  await BaseCalcModel.create(req.body);
-  res.send('Gravação dos dados dentro do MongoDB');
+
+  try {
+    await BaseCalcModel.create(req.body);
+    return res.status(201).json('Success!');
+  } catch (err) {
+    return res.status(400).json('Error saving to database')
+  }
 });
 
-// Validar qual o código de resposta mais apropriado [200, 201, etc]
+// status 201
 app.put('/base-calc', async (req, res) => {
-  console.log(req.body);
-  await BaseCalcModel.findOneAndUpdate({},req.body);
-  res.send('Atualização dos dados dentro do MongoDB');
+  // console.log(req.body);
+  try {
+    await BaseCalcModel.findOneAndUpdate({},req.body);
+    return res.status(201).json('Success!')
+ 
+  } catch(err) {
+    return res.status(400).json('Error saving to database')
+  }
 });
 
 app.get('/healthcheck', (req, res) => {
